@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrolling-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.logo-wrapper {
+    display: flex;
+    animation: scroll 40s linear infinite; /* Adjust duration for speed */
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%); /* Move the full width of the logo wrapper */
+    }
+}
+
+.logo {
+    height: 6rem; /* Default height */
+    margin: 0 1rem; /* Spacing between logos */
+    flex-shrink: 0; /* Prevent logos from shrinking */
+}
+
+/* Add this rule to ensure the wrapper is wide enough */
+.logo-wrapper {
+    width: calc(200% + 2rem); /* Adjust based on the number of logos */
+}
+
+/* Responsive styles */
+@media (max-width: 640px) { /* Small devices (sm) */
+    .logo {
+        height: 4rem; /* Smaller logo height for small devices */
+        margin: 0 0.5rem; /* Reduced spacing */
+    }
+
+    .logo-wrapper {
+        width: calc(300% + 1rem); /* Increase width for more logos visible at once */
+    }
+}
+
+@media (max-width: 768px) { /* Medium devices (md) */
+    .logo {
+        height: 5rem; /* Adjust logo height for medium devices */
+        margin: 0 0.75rem; /* Adjust spacing */
+    }
+
+    .logo-wrapper {
+        width: calc(250% + 1rem); /* Adjust based on the number of logos */
+    }
+}
+.glass-effect {
+    background: rgb(199, 12, 12);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .glass-effect:hover {
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 60px rgba(0, 0, 0, 0.2);
+  }
+  
+
+
+
+  .explore-startups {
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    background: rgba(20, 111, 196, 0.89);
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 500ms ease-out;
+  }
+  
+  .explore-startups::before {
+    content: '';
+    background: rgb(235, 231, 8);
+    width: 60%;
+    height: 100%;
+    top: 0%;
+    left: -125%;
+    transform: skew(45deg);
+    position: absolute;
+    transition: left 500ms ease-out;
+  }
+  
+  .explore-startups:hover {
+    transform: translateY(-10%);
+  }
+  
+  .explore-startups:hover::before {
+    left: 150%;
+  }
+  
+  /* Service grid items glassmorphism hover */
+  .service-item {
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    background: rgba(137, 158, 177, 0.253);
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 500ms ease-out;
+  }
+  
+  .service-item::before {
+    content: '';
+    background: rgba(255, 255, 255, 0.4);
+    width: 60%;
+    height: 100%;
+    top: 0%;
+    left: -125%;
+    transform: skew(45deg);
+    position: absolute;
+    transition: left 500ms ease-out;
+  }
+  
+  .service-item:hover {
+    transform: translateY(-10%);
+  }
+  
+  .service-item:hover::before {
+    left: 150%;
+  }
+  
