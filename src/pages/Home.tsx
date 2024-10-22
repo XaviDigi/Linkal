@@ -4,7 +4,7 @@ import { Rocket } from 'lucide-react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import ScrollingLogos from '../components/ScrollingLogos';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import GoogleLogo from '../images/google-logo.svg'; // Ensure this path is correct
+import GoogleLogo from '/images/google-logo.svg'; // Ensure this path is correct
 
 const Home: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);

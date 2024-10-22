@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <img
-            src="/src/images/Linkal.png" // Update the path to your logo
+            src="/images/Linkal.png" // Update the path to your logo
             alt="Linkal Logo"
             className="h-10"
           />

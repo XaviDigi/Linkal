@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase';
-import GoogleLogo from '../images/google-logo.svg'; // Adjust the path based on your project structure
+import GoogleLogo from '/images/google-logo.svg'; // Adjust the path based on your project structure
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
