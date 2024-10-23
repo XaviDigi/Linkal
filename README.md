@@ -2,6 +2,11 @@
 
 Welcome to **Linkal**, the platform where startups can thrive, connect, and grow within a vibrant entrepreneurial community! 🌟
 
+## 🌍 Live Demo
+
+Check out the live version of the app here:  
+[**Linkal Live Demo**](https://linkal.vercel.app/)
+
 ## 🌟 Key Features
 
 - **Explore Startups**: Dive into the world of innovative startups and discover the next big idea! 💡
@@ -39,10 +44,7 @@ Welcome to **Linkal**, the platform where startups can thrive, connect, and grow
 ## 📸 Screenshots
 
 - **Home Page**  
-  ![Home Page Screenshot](path_to_screenshot_home)
-
-- **Sign in with Google**  
-  ![Google Login Screenshot](path_to_screenshot_login)
+[![Home Page Screenshot](https://i.ibb.co/kQBNsRB/Screenshot-2024-10-24-020307.png)](https://ibb.co/J5tDwft)
 
 ## 🌍 How to Use
 
