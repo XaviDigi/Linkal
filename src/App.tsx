@@ -15,7 +15,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
   const { currentUser } = useAuth();
 
   if (!currentUser) {
-    return <Login />; // Redirect to login if user is not authenticated
+    return <Login />;
   }
 
   return children;
