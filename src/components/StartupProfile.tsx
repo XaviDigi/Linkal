@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { FaRegEnvelope, FaGlobe, FaUsers, FaMapMarkerAlt, FaClipboardList } from 'react-icons/fa';
+import { Facebook, Twitter, Linkedin, Instagram, Github, Youtube, FileText, MapPin, Users } from 'lucide-react';
+import { FaTiktok, FaGlobe, FaMapMarkerAlt } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import Messaging from './Messaging';
+import { X } from 'lucide-react'; // Added for close button
 
 interface Startup {
   id: string;
@@ -15,6 +17,17 @@ interface Startup {
   location: string;
   teamSize: string;
   images: string[];
+  socialLinks: {
+    facebook: string;
+    twitter: string;
+    linkedin: string;
+    instagram: string;
+    github: string;
+    youtube: string;
+    tiktok: string;
+    website: string;
+    location: string;
+  };
 }
 
 const StartupProfile: React.FC = () => {
@@ -24,7 +37,6 @@ const StartupProfile: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // State for image modal
   const [isImageModalOpen, setImageModalOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isMessagingOpen, setMessagingOpen] = useState<boolean>(false);
@@ -43,14 +55,6 @@ const StartupProfile: React.FC = () => {
 
     fetchStartup();
   }, [id]);
-
-  const handleMessageButtonClick = () => {
-    if (!currentUser) {
-      navigate('/login');
-    } else {
-      setMessagingOpen(true);
-    }
-  };
 
   const openImageModal = (image: string) => {
     setSelectedImage(image);
@@ -75,72 +79,109 @@ const StartupProfile: React.FC = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-4xl font-bold mb-4 text-center text-gray-800">{startup.name}</h2>
-      
-      {startup.images && startup.images.length > 0 && (
-        <img 
-          src={startup.images[0]} 
-          alt={startup.name} 
-          className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer shadow transition-transform transform hover:scale-105"
-          onClick={() => openImageModal(startup.images[0])}
-        />
-      )}
+    <div className="container mx-auto p-6">
+      <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="relative h-64">
+          <img
+            src={startup.images[0] || '/placeholder.svg?height=256&width=768'}
+            alt={startup.name}
+            className="w-full h-full object-cover cursor-pointer"
+            onClick={() => openImageModal(startup.images[0])}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-center justify-center">
+            <h2 className="text-4xl font-bold text-white text-center">{startup.name}</h2>
+          </div>
+        </div>
 
-      <div className="px-4 mb-4 space-y-3">
-        <div className="flex items-center mb-2">
-          <FaClipboardList className="text-blue-500 mr-2" />
-          <p className="text-gray-700"><strong>Category:</strong> {startup.category}</p>
-        </div>
-        <div className="flex items-center mb-2">
-          <FaRegEnvelope className="text-blue-500 mr-2" />
-          <p className="text-gray-700"><strong>Description:</strong> {startup.description}</p>
-        </div>
-        <div className="flex items-center mb-2">
-          <FaGlobe className="text-blue-500 mr-2" />
-          <p className="text-gray-700"><strong>Website:</strong> 
-            <a href={startup.website} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline hover:text-blue-700">{startup.website}</a>
-          </p>
-        </div>
-        <div className="flex items-center mb-2">
-          <FaMapMarkerAlt className="text-blue-500 mr-2" />
-          <p className="text-gray-700"><strong>Location:</strong> {startup.location}</p>
-        </div>
-        <div className="flex items-center mb-4">
-          <FaUsers className="text-blue-500 mr-2" />
-          <p className="text-gray-700"><strong>Team Size:</strong> {startup.teamSize}</p>
+        <div className="p-6 space-y-6 bg-gray-50">
+          <div className="space-y-4 bg-white p-4 rounded-lg shadow">
+            <h3 className="font-semibold text-lg">Description</h3>
+            <p className="text-gray-700">{startup.description}</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FileText className="text-blue-500" />
+                <span className="font-semibold">Category:</span>
+                <span>{startup.category}</span>
+              </div>
+
+              {/* Social Links Section */}
+              {startup.socialLinks && (
+                <div className="space-y-4 flex flex-col items-start">
+                  <h3 className="font-semibold text-lg"></h3>
+                  <div className="flex flex-col space-y-2">
+                    {Object.entries(startup.socialLinks).map(([platform, url]) =>
+                      url ? (
+                        <div key={platform} className="flex items-center space-x-2 p-2 border rounded-lg shadow hover:bg-gray-100 transition w-64">
+                          {platform === 'facebook' && <Facebook className="w-6 h-6 text-blue-600" />}
+                          {platform === 'twitter' && <Twitter className="w-6 h-6 text-blue-400" />}
+                          {platform === 'linkedin' && <Linkedin className="w-6 h-6 text-blue-700" />}
+                          {platform === 'instagram' && <Instagram className="w-6 h-6 text-pink-600" />}
+                          {platform === 'github' && <Github className="w-6 h-6" />}
+                          {platform === 'youtube' && <Youtube className="w-6 h-6 text-red-600" />}
+                          {platform === 'tiktok' && <FaTiktok className="w-6 h-6 text-black" />}
+                          {platform === 'website' && <FaGlobe className="w-6 h-6 text-green-600" />}
+                          {platform === 'location' && <FaMapMarkerAlt className="w-6 h-6 text-red-600" />}
+                          <span className="text-blue-500 hover:text-blue-700 text-center flex-1">
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="capitalize">
+                              {platform}
+                            </a>
+                          </span>
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center space-x-2">
+          
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Additional Images</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {startup.images.slice(1, 4).map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Additional Image ${index + 1}`}
+                      className="w-full h-32 object-cover rounded-lg shadow cursor-pointer"
+                      onClick={() => openImageModal(image)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-center mb-4">
-        <button
-          onClick={handleMessageButtonClick}
-          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-200 flex items-center transform hover:scale-105"
-        >
-          <FaRegEnvelope className="mr-2" /> Message
-        </button>
-      </div>
-
-      {/* Image Modal */}
       {isImageModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50" onClick={closeImageModal}>
-          <img 
-            src={selectedImage || ''} 
-            alt="Full View" 
-            className="max-w-full max-h-full cursor-auto shadow-lg"
-            onClick={(e) => e.stopPropagation()} 
+          <img
+            src={selectedImage || ''}
+            alt="Full View"
+            className="max-w-full max-h-full object-contain"
+            onClick={(e) => e.stopPropagation()}
           />
+          <button className="absolute top-4 right-4 text-white hover:text-gray-300 transition" onClick={closeImageModal}>
+            <X size={24} />
+          </button>
         </div>
       )}
 
-      {/* Messaging Window */}
       {isMessagingOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md relative shadow-lg">
             <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition" onClick={closeMessaging}>
-              &times;
+              <X size={24} />
             </button>
-            <h4 className="text-xl font-bold mb-4 text-gray-800">Chat with {startup.name}</h4>
+            
             <Messaging userId={startup.id} />
           </div>
         </div>
