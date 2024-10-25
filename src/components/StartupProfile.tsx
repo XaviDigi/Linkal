@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { Facebook, Twitter, Linkedin, Instagram, Github, Youtube, FileText, MapPin, Users } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Instagram, Github, Youtube, FileText} from 'lucide-react';
 import { FaTiktok, FaGlobe, FaMapMarkerAlt } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import Messaging from './Messaging';
-import { X } from 'lucide-react'; // Added for close button
+import { X } from 'lucide-react';
 
 interface Startup {
   id: string;
@@ -34,8 +34,7 @@ const StartupProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [startup, setStartup] = useState<Startup | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
-  const { currentUser } = useAuth();
+
 
   const [isImageModalOpen, setImageModalOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -80,22 +79,19 @@ const StartupProfile: React.FC = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="relative h-64">
+      <div className="">
+        <div className="relative h-64 flex flex-col items-center">
           <img
             src={startup.images[0] || '/placeholder.svg?height=256&width=768'}
             alt={startup.name}
-            className="w-full h-full object-cover cursor-pointer"
-            onClick={() => openImageModal(startup.images[0])}
+            className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-lg" 
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-center justify-center">
-            <h2 className="text-4xl font-bold text-white text-center">{startup.name}</h2>
-          </div>
+          <h2 className="text-4xl font-bold text-blue-600 text-center mt-4">{startup.name}</h2>
         </div>
 
         <div className="p-6 space-y-6 bg-gray-50">
           <div className="space-y-4 bg-white p-4 rounded-lg shadow">
-            <h3 className="font-semibold text-lg">Description</h3>
+            <h3 className="font-semibold text-lg text-center">Description</h3>
             <p className="text-gray-700">{startup.description}</p>
           </div>
           
