@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
-import { db } from '../firebase'; // Import your Firestore database
-import { doc, setDoc, getDoc } from 'firebase/firestore'; // Import Firestore functions
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth, db } from '../firebase'; 
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import GoogleLogo from '/images/google-logo.svg';
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState(''); // State for username
+  const [username, setUsername] = useState(''); 
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  
+  const provider = new GoogleAuthProvider();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,11 +23,11 @@ const SignUp: React.FC = () => {
 
       if (userSnap.exists()) {
         setError('Username already exists. Please choose another one.');
-        return; // Exit if username is not unique
+        return; 
       }
 
       // Create user with email and password
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
 
       // Use the username as the document ID in Firestore
       await setDoc(userDoc, {
@@ -35,8 +37,19 @@ const SignUp: React.FC = () => {
       });
 
       navigate('/'); // Navigate after successful signup
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error("Error creating account:", error);
       setError('Failed to create an account. Please try again.');
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+      navigate('/');
+    } catch (error: unknown) { 
+      console.error("Google login failed:", error instanceof Error ? error.message : error);
+      setError('Failed to log in with Google.');
     }
   };
 
@@ -81,6 +94,16 @@ const SignUp: React.FC = () => {
         <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300">
           Sign Up
         </button>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center bg-white text-blue-600 py-2 rounded-lg hover:bg-blue-100 transition duration-300"
+          >
+            <img src={GoogleLogo} alt="Google Logo" className="w-5 h-5 mr-2" /> {/* Google logo */}
+            Sign in with Google
+          </button>
+        </div>
       </form>
     </div>
   );
