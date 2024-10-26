@@ -14,10 +14,23 @@ const categories = [
   'AI', 'Others'
 ]
 
-const AddStartup: React.FC = () => {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('')
+interface StartupData {
+  name: string;
+  description: string;
+  category: string;
+  images: string[];
+  socialLinks: Record<string, string>;
+}
+
+interface StartupFormProps {
+  initialData?: StartupData; 
+  onSubmit: (data: StartupData) => void;
+}
+
+const AddStartup: React.FC<StartupFormProps> = ({ initialData, onSubmit }) => {
+  const [name, setName] = useState(initialData?.name || '')
+  const [description, setDescription] = useState(initialData?.description || '')
+  const [category, setCategory] = useState(initialData?.category || '')
   const [profilePicture, setProfilePicture] = useState<File | null>(null)
   const [profilePicturePreview, setProfilePicturePreview] = useState<string | null>(null)
   const [images, setImages] = useState<File[]>([])
@@ -35,6 +48,7 @@ const AddStartup: React.FC = () => {
   })
   const { currentUser } = useAuth()
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -60,6 +74,8 @@ const AddStartup: React.FC = () => {
       return
     }
 
+    setLoading(true); // Set loading to true when submitting
+
     try {
       const imageUrls = await Promise.all(
         images.map(async (image) => {
@@ -80,7 +96,6 @@ const AddStartup: React.FC = () => {
         name,
         description,
         category,
-     
         images: imageUrls,
         socialLinks,
         createdBy: currentUser.uid,
@@ -88,9 +103,14 @@ const AddStartup: React.FC = () => {
         createdAt: new Date(),
       })
 
-      navigate('/startups')
+     
+      onSubmit({ name, description, category, images: imageUrls, socialLinks });
+      navigate('/startups');
     } catch (error) {
+      console.error(error)
       setError('Failed to add startup. Please try again.')
+    } finally {
+      setLoading(false); // Reset loading state
     }
   }
 
@@ -219,9 +239,13 @@ const AddStartup: React.FC = () => {
             <button 
               type="submit" 
               className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg relative overflow-hidden transition duration-300 group"
+              disabled={loading} 
             >
-              <span className="absolute inset-0 bg-yellow-300 rounded-lg opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out transform -translate-x-full group-hover:translate-x-0 bg-gradient-to-r from-transparent to-red-600 mix-blend-overlay"></span>
-              <span className="relative z-10">Add Startup</span>
+              {loading ? (
+                <span>Adding your Startup...</span>
+              ) : (
+                <span className="relative z-10">Add Startup</span>
+              )}
             </button>
           </form>
         </div>
