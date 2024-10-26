@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+
+
+type Startup = {
+  id: string;
+  name: string;
+ 
+};
 
 const Profile: React.FC = () => {
   const { currentUser, logout } = useAuth();
-  const [startups, setStartups] = useState<any[]>([]);
+  const [startups, setStartups] = useState<Startup[]>([]);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -15,6 +22,14 @@ const Profile: React.FC = () => {
       navigate('/login');
     } catch {
       console.error('Failed to log out');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this startup?');
+    if (confirmDelete) {
+      await deleteDoc(doc(db, 'startups', id));
+      setStartups(startups.filter(startup => startup.id !== id));
     }
   };
 
@@ -28,7 +43,7 @@ const Profile: React.FC = () => {
         const querySnapshot = await getDocs(q);
         const startupsData = querySnapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data(),
+          name: doc.data().name, 
         }));
 
         setStartups(startupsData);
@@ -59,10 +74,21 @@ const Profile: React.FC = () => {
         <ul className="space-y-2">
           {startups.length > 0 ? (
             startups.map(startup => (
-              <li key={startup.id} className="bg-gray-100 p-3 rounded-md shadow-sm hover:bg-gray-200 transition">
+              <li key={startup.id} className="bg-gray-100 p-3 rounded-md shadow-sm hover:bg-gray-200 transition flex justify-between items-center">
                 <Link to={`/startups/${startup.id}`} className="text-blue-500 hover:underline text-lg">
                   {startup.name}
                 </Link>
+                <div className="flex space-x-2">
+                  {/* <Link to={`/edit-startup/${startup.id}`} className="text-blue-500 hover:underline">
+                    Edit
+                  </Link> */}
+                  <button
+                    onClick={() => handleDelete(startup.id)}
+                    className="text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </div>
               </li>
             ))
           ) : (
