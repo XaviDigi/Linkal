@@ -1,6 +1,6 @@
 # 🚀 Linkal
 
-Welcome to **Linkal**, the platform where startups can thrive, connect, and grow within a vibrant entrepreneurial community! 🌟
+Welcome to **Linkal**, the platform where startups can thrive, connect, and grow within a vibrant entrepreneurial community. 🌟
 
 ## 🌍 Live Demo
 
